@@ -8,44 +8,52 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Net.Http;
-using System.Linq.Expressions;
+using DailyDashboardAPIs;
 
 namespace StockPrices
 {
-    public static class GetStockPrices
+    public static class GetWeatherForecast
     {
         private static readonly HttpClient client = new HttpClient();
 
-        [FunctionName("GetStockPrices")]
+        [FunctionName("WeatherForecast")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
-            
-            //ensure we have a stock symbol to look up
-            string stockSymbol = req.Query["symbol"];
-            if (String.IsNullOrEmpty(stockSymbol))
-                return new BadRequestObjectResult("Please provide a stock symbol");
 
-            //api only accepts uppercase
-            stockSymbol = stockSymbol.ToUpper();
-            
+            //ensure we have a zip code
+            string zipcode = req.Query["zipcode"];
+            if (String.IsNullOrEmpty(zipcode))
+                return new BadRequestObjectResult("Please provide a zipcode");
+
             //ensure we have a token to call the api
-            string apiToken = System.Environment.GetEnvironmentVariable("FinnHubapiToken");
+            string apiToken = System.Environment.GetEnvironmentVariable("WeatherapiKey");
             if (string.IsNullOrEmpty(apiToken))
                 return new BadRequestObjectResult("no api token provided");
 
             //make the api call
             client.DefaultRequestHeaders.Accept.Clear();
-            var stringTask = client.GetStringAsync(String.Format("https://finnhub.io/api/v1/quote?symbol={0}&token={1}",stockSymbol, apiToken));
+            var stringTask = client.GetStringAsync(String.Format("https://api.openweathermap.org/data/2.5/weather?zip={0}&units=imperial&appid={1}", zipcode, apiToken));
             var msg = await stringTask;
-            
-            StockPriceResult result = JsonConvert.DeserializeObject<StockPriceResult>(msg);
 
+            WeatherResult result = null;
+
+            try
+            {
+                result = new WeatherResult(msg);
+            }
+            catch (Exception e) 
+            {
+                log.LogError(e, "problem parsing weather result");
+                return new BadRequestObjectResult("Could not parse result from api");
+            }
             
-            return result.CurrentPrice > 0
-                ? (ActionResult)new OkObjectResult(String.Format("CurrentPrice of {0} is {1}", stockSymbol, result.CurrentPrice))
+
+
+            return result != null
+                ? (ActionResult)new OkObjectResult(result)
                 : new BadRequestObjectResult("Error getting price data");
         }
     }
