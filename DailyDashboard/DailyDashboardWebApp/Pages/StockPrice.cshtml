@@ -1,0 +1,57 @@
+﻿@page
+@model DailyDashboardWebApp.Pages.StockPriceModel
+@{
+    ViewData["Title"] = "Stocks";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>StockPrice</h1>
+<br />
+@using (Html.BeginForm("OnPostAsync"))
+{
+    <input asp-for="Symbols" />
+    <br />
+    <button type="submit">Load Stocks</button>
+}
+<br/>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Symbol
+            </th>
+            <th>
+                Current Price
+            </th>
+            <th>
+                High Price
+            </th>
+            <th>
+                Low Price
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Stocks != null)
+        {
+            foreach ((string symbol, DailyDashboardWebApp.Models.StockPrice price) in Model.Stocks)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => symbol)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => price.CurrentPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => price.HighPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => price.LowPrice)
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+

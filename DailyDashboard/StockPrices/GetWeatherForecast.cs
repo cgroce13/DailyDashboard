@@ -38,7 +38,7 @@ namespace StockPrices
             var stringTask = client.GetStringAsync(String.Format("https://api.openweathermap.org/data/2.5/weather?zip={0}&units=imperial&appid={1}", zipcode, apiToken));
             var msg = await stringTask;
 
-            WeatherResult result = null;
+            WeatherResult result;
 
             try
             {
