@@ -45,7 +45,7 @@ namespace StockPrices
 
             
             return result.CurrentPrice > 0
-                ? (ActionResult)new OkObjectResult(String.Format("CurrentPrice of {0} is {1}", stockSymbol, result.CurrentPrice))
+                ? (ActionResult)new OkObjectResult(JsonConvert.SerializeObject(result))
                 : new BadRequestObjectResult("Error getting price data");
         }
     }
