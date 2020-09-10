@@ -45,13 +45,15 @@ namespace DailyDashboardAPIs
             Wind = data.wind.speed;
             City = data.name;
 
+            TimeZoneInfo centralTimezone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
+
             long sunriseUTC = data.sys.sunrise;
             DateTimeOffset sunriseOffset = DateTimeOffset.FromUnixTimeSeconds(sunriseUTC);
-            Sunrise = sunriseOffset.LocalDateTime.TimeOfDay;
+            Sunrise = TimeZoneInfo.ConvertTime(sunriseOffset, centralTimezone).TimeOfDay ;
             
             long sunsetUTC = data.sys.sunrise;
             DateTimeOffset sunsetOffset = DateTimeOffset.FromUnixTimeSeconds(sunsetUTC);
-            Sunset = sunsetOffset.LocalDateTime.TimeOfDay;
+            Sunset = TimeZoneInfo.ConvertTime(sunsetOffset, centralTimezone).TimeOfDay;
         }
 
     }
