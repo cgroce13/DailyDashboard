@@ -8,7 +8,8 @@ namespace DailyDashboardAPIs
 {
     public class WeatherResult
     {
-        
+        public string City { get; set; }
+
         public double Temp { get; set; }
 
         
@@ -42,6 +43,7 @@ namespace DailyDashboardAPIs
             Low = data.main.temp_min;
             High = data.main.temp_max;
             Wind = data.wind.speed;
+            City = data.name;
 
             long sunriseUTC = data.sys.sunrise;
             DateTimeOffset sunriseOffset = DateTimeOffset.FromUnixTimeSeconds(sunriseUTC);

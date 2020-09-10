@@ -19,8 +19,6 @@ namespace DailyDashboardWebApp.Pages
         [BindProperty]
         public string Symbols { get; set; }
 
-        //public StockPrice Stock { get; set; }
-
         public Dictionary<string, StockPrice> Stocks { get; set; } = new Dictionary<string, StockPrice>();
 
         public void OnGet()
@@ -32,22 +30,14 @@ namespace DailyDashboardWebApp.Pages
         {
             String[] symbols = Symbols.Replace(" ","").Split(",");
 
-            try
+            foreach (string s in symbols)
             {
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Clear();
+                var result = await client.GetStringAsync(String.Format(stockpriceurl, s));
 
-                foreach (string s in symbols)
-                {
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    var result = await client.GetStringAsync(String.Format(stockpriceurl, s));
-
-                    StockPrice stock = JsonConvert.DeserializeObject<StockPrice>(result);
-                    Stocks.Add(s, stock);
-                }
-            }
-            catch(Exception e)
-            {
-                return RedirectToPage("Error");
+                StockPrice stock = JsonConvert.DeserializeObject<StockPrice>(result);
+                Stocks.Add(s, stock);
             }
 
             //reset the input field

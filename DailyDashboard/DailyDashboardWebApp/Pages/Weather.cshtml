@@ -1,0 +1,79 @@
+﻿@page
+@model DailyDashboardWebApp.Pages.WeatherModel
+@{
+    ViewData["Title"] = "Weather";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Weather</h1>
+<br/>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                City
+            </th>
+            <th>
+                Current Temp
+            </th>
+            <th>
+                Feels Like
+            </th>
+            <th>
+                High
+            </th>
+            <th>
+                Low
+            </th>
+            <th>
+                Humidity
+            </th>
+            <th>
+                Wind
+            </th>
+            <th>
+                Sunrise
+            </th>
+            <th>
+                Sunset
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.WeatherResults != null)
+        {
+            foreach (DailyDashboardWebApp.Models.Weather result in Model.WeatherResults)
+            {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => result.City)
+            </td>
+            <td>
+                @Html.DisplayFor(model => result.Temp)
+            </td>
+            <td>
+                @Html.DisplayFor(model => result.FeelsLike)
+            </td>
+            <td>
+                @Html.DisplayFor(model => result.High)
+            </td>
+            <td>
+                @Html.DisplayFor(model => result.Low)
+            </td>
+            <td>
+                @Html.DisplayFor(model => result.Humidity)
+            </td>
+            <td>
+                @Html.DisplayFor(model => result.Wind)
+            </td>
+            <td>
+                @Html.DisplayFor(model => result.Sunrise)
+            </td>
+            <td>
+                @Html.DisplayFor(model => result.Sunset)
+            </td>
+        </tr>
+            }
+        }
+    </tbody>
+</table>
