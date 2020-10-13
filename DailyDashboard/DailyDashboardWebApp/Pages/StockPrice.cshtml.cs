@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using DailyDashboardWebApp.Models;
 using System.Net.Http;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace DailyDashboardWebApp.Pages
 {
@@ -28,12 +29,15 @@ namespace DailyDashboardWebApp.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
+            string accessToken = this.Request.Headers["X-MS-TOKEN-AAD-ACCESS-TOKEN"];
+
             String[] symbols = Symbols.Replace(" ","").Split(",");
 
             foreach (string s in symbols)
             {
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
                 var result = await client.GetStringAsync(String.Format(stockpriceurl, s));
 
                 StockPrice stock = JsonConvert.DeserializeObject<StockPrice>(result);

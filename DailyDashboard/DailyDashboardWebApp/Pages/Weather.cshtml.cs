@@ -22,10 +22,13 @@ namespace DailyDashboardWebApp.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
+            string accessToken = this.Request.Headers["X-MS-TOKEN-AAD-ACCESS-TOKEN"];
+
             foreach (string zc in zipcodes)
             {
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
                 var result = await client.GetStringAsync(String.Format(weatherurl, zc));
 
                 Weather weather = JsonConvert.DeserializeObject<Weather>(result);
