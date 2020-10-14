@@ -4,7 +4,8 @@
     ViewData["Title"] = "Daily Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">@Model.Greeting</h1>
-    <p>Today is @DateTime.Now.DayOfWeek, @DateTime.Now.Date.ToString("MMMM dd") </p>
-</div>
+    <div class="text-center">
+        <h1 class="display-4">@Model.Greeting</h1>
+        <p>Today is @DateTime.Now.DayOfWeek, @DateTime.Now.Date.ToString("MMMM dd") </p>
+        <p>Current Time is @Model.CurrentTime </p>
+    </div>

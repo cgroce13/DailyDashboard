@@ -16,6 +16,8 @@ namespace DailyDashboardWebApp.Pages
 
         public string Greeting { get; set; }
 
+        public string CurrentTime { get; set; }
+
         public IndexModel(ILogger<IndexModel> logger)
         {
             _logger = logger;
@@ -23,12 +25,18 @@ namespace DailyDashboardWebApp.Pages
 
         public void OnGet()
         {
-            if(DateTime.Now.Hour >= 0 && DateTime.Now.Hour < 12)
+            TimeZoneInfo centralTimezone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
+
+            DateTime now = TimeZoneInfo.ConvertTime(DateTime.Now, centralTimezone);
+
+            if (now.Hour< 12)
             { Greeting = "Good Morning!"; }
-            else if (DateTime.Now.Hour > 12 && DateTime.Now.Hour < 5)
+            else if (now.Hour > 12 && now.Hour < 17)
             { Greeting = "Good Afternoon!"; }
             else 
             { Greeting = "Good Evening!"; }
+
+            CurrentTime = now.ToString("h:mm tt");
 
         }
     }
