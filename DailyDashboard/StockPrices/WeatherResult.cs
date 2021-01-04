@@ -51,7 +51,7 @@ namespace DailyDashboardAPIs
             DateTimeOffset sunriseOffset = DateTimeOffset.FromUnixTimeSeconds(sunriseUTC);
             Sunrise = TimeZoneInfo.ConvertTime(sunriseOffset, centralTimezone).TimeOfDay ;
             
-            long sunsetUTC = data.sys.sunrise;
+            long sunsetUTC = data.sys.sunset;
             DateTimeOffset sunsetOffset = DateTimeOffset.FromUnixTimeSeconds(sunsetUTC);
             Sunset = TimeZoneInfo.ConvertTime(sunsetOffset, centralTimezone).TimeOfDay;
         }
